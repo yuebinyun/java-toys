@@ -6,12 +6,35 @@ group 'com.toys'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
 
 repositories {
     mavenCentral()
 }
 
+jar {
+
+    delete new File("build/libs/j-stun-1.0-SNAPSHOT.jar")
+
+    manifest {
+        attributes "Main-Class": "com.hankcs.network.Main"
+    }
+
+    from { (configurations.runtime).collect { it.isDirectory() ? it : zipTree(it) } } {
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/NOTICE*',
+                'META-INF/DEPENDENCIES*', 'META-INF/maven/*', 'META-INF/LICENSE*',
+                'META-INF/services/*', 'META-INF/git*'
+    }
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
+
+    // https://mvnrepository.com/artifact/org.jitsi/ice4j
+    compile group: 'org.jitsi', name: 'ice4j', version: '1.0'
+
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+
 }
